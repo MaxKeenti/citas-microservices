@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>mx.ipn.upiicsa.web</groupId>
+    <artifactId>citas-microservices-aggregator</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Citas Microservices Root</name>
+    <description>Aggregator for Citas Microservices System</description>
+
+    <modules>
+        <module>access-control-service</module>
+        <module>catalog-service</module>
+        <module>hresources-service</module>
+        <module>appointment-service</module>
+        <module>web-portal</module>
+    </modules>
+
+</project>
