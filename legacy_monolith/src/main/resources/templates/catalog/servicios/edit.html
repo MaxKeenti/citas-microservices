@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Editar Servicio</title>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <!-- 1. Main Navigation -->
+    <div th:replace="~{fragments/nav :: main(activeModule='catalog')}"></div>
+
+    <div class="container mx-auto mt-10">
+        <!-- 2. Secondary Tabs -->
+        <div th:replace="~{fragments/tabs :: catalog(activeTab='servicios')}"></div>
+
+        <!-- 3. Content Card -->
+        <div class="p-6 bg-white rounded-b-lg shadow-lg rounded-tr-lg border border-gray-200">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Editar Servicio</h1>
+        <form th:action="@{/servicios/update}" th:object="${servicioForm}" method="post">
+            <input type="hidden" th:field="*{id}" />
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                <input type="text" th:field="*{nombre}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <p th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="text-rose-500 text-xs italic mt-1"></p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                <textarea th:field="*{descripcion}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="3"></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Duración (min)</label>
+                <input type="number" th:field="*{duracion}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <p th:if="${#fields.hasErrors('duracion')}" th:errors="*{duracion}" class="text-rose-500 text-xs italic mt-1"></p>
+            </div>
+            <div class="mb-6">
+                <label class="flex items-center">
+                    <input type="checkbox" th:field="*{activo}" class="form-checkbox h-5 w-5 accent-teal-600" />
+                    <span class="ml-2 text-gray-700 text-sm font-bold">Activo</span>
+                </label>
+            </div>
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Actualizar</button>
+                <button type="button" th:onclick="|window.location.href='@{/servicios/list}'|" class="inline-block align-baseline font-bold text-sm text-teal-500 hover:text-teal-800">Volver a la lista</button>
+            </div>
+        </form>
+    </div>
+    </div>
+</body>
+</html>

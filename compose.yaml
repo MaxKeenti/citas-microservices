@@ -1,45 +1,44 @@
 services:
-  app:
-    build:
-      context: .
+  access-control-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: access_control_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
     ports:
-      - 8080:8080
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/citas_db
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD_FILE=/run/secrets/db-password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
-    secrets:
-      - db-password
-
-  db:
-    image: postgis/postgis:16-3.4-alpine
-    restart: always
-    user: postgres
-    secrets:
-      - db-password
+      - "5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./db/01-create.sql:/docker-entrypoint-initdb.d/01-create.sql
-      - ./db/02-create-admin.sql:/docker-entrypoint-initdb.d/02-create-admin.sql
-      - ./db/03-seed-data.sql:/docker-entrypoint-initdb.d/03-seed-data.sql
+      - ./db/init/access:/docker-entrypoint-initdb.d
+
+  catalog-db:
+    image: postgres:15
     environment:
-      - POSTGRES_DB=citas_db
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-    expose:
-      - 5432
-    healthcheck:
-      test: [ "CMD", "pg_isready" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      POSTGRES_DB: catalog_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./db/init/catalog:/docker-entrypoint-initdb.d
 
-volumes:
-  db-data:
+  hresources-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: hresources_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./db/init/hresources:/docker-entrypoint-initdb.d
 
-secrets:
-  db-password:
-    file: db/db-password.txt
+  appointment-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: appointment_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./db/init/appointment:/docker-entrypoint-initdb.d

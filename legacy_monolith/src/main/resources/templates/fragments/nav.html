@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Main Navigation Module Bar -->
+    <nav th:fragment="main(activeModule)" class="bg-rose-950 p-4 shadow-md">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <button type="button" onclick="window.location.href='/welcome'" class="text-rose-400 text-xl font-bold mr-6">Sistema de Citas</button>
+            
+            <div class="flex space-x-6 text-sm">
+                <button type="button" onclick="window.location.href='/usuarios/list'" th:if="${session.persona.usuario.idRol == 1}" th:class="${activeModule == 'accesscontrol' ? 'text-rose-100 font-bold border-b-2 border-rose-100 pb-1' : 'text-rose-400 hover:text-rose-100 transition duration-150'}">
+                   Accesos
+                </button>
+
+                <button type="button" onclick="window.location.href='/agenda'" th:class="${activeModule == 'citas' ? 'text-rose-100 font-bold border-b-2 border-rose-100 pb-1' : 'text-rose-400 hover:text-rose-100 transition duration-150'}">
+                   Agenda
+                </button>
+
+                <button type="button" onclick="window.location.href='/citas/list'" th:class="${activeModule == 'appointment' ? 'text-rose-100 font-bold border-b-2 border-rose-100 pb-1' : 'text-rose-400 hover:text-rose-100 transition duration-150'}">
+                   Historial
+                </button>
+
+                <button type="button" onclick="window.location.href='/servicios/list'" th:if="${session.persona.usuario.idRol == 1}" th:class="${activeModule == 'catalog' ? 'text-rose-100 font-bold border-b-2 border-rose-100 pb-1' : 'text-rose-400 hover:text-rose-100 transition duration-150'}">
+                   Catálogos
+                </button>
+
+                <button type="button" onclick="window.location.href='/sucursales/list'" th:if="${session.persona.usuario.idRol == 1 or session.persona.usuario.idRol == 2}" th:class="${activeModule == 'hresources' ? 'text-rose-100 font-bold border-b-2 border-rose-100 pb-1' : 'text-rose-400 hover:text-rose-100 transition duration-150'}">
+                   Recursos Humanos
+                </button>
+
+                <button type="button" onclick="window.location.href='/logout'" class="text-rose-400 hover:text-rose-100 transition duration-150 ml-4 font-bold">
+                   Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

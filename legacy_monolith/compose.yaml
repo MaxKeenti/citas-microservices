@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/citas_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD_FILE=/run/secrets/db-password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+    secrets:
+      - db-password
+
+  db:
+    image: postgis/postgis:16-3.4-alpine
+    restart: always
+    user: postgres
+    secrets:
+      - db-password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/01-create.sql:/docker-entrypoint-initdb.d/01-create.sql
+      - ./db/02-create-admin.sql:/docker-entrypoint-initdb.d/02-create-admin.sql
+      - ./db/03-seed-data.sql:/docker-entrypoint-initdb.d/03-seed-data.sql
+    environment:
+      - POSTGRES_DB=citas_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
+
+secrets:
+  db-password:
+    file: db/db-password.txt

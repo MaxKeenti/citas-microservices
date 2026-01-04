@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    
+    <!-- Tab styling mixins -->
+    <!-- Active Tab: bg-white border-t border-l border-r border-gray-200 rounded-t text-teal-700 -->
+    <!-- Inactive Tab: bg-gray-100 text-teal-500 hover:text-teal-800 -->
+
+    <!-- Access Control Tabs -->
+    <div th:fragment="accesscontrol(activeTab)" class="flex border-b border-gray-200">
+        <button type="button" onclick="window.location.href='/usuarios/list'" th:class="${activeTab == 'usuarios' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Usuarios
+        </button>
+        <button type="button" onclick="window.location.href='/personas/list'" th:class="${activeTab == 'personas' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Personas
+        </button>
+        <button type="button" onclick="window.location.href='/generos/list'" th:class="${activeTab == 'generos' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Géneros
+        </button>
+        <button type="button" onclick="window.location.href='/roles/list'" th:class="${activeTab == 'roles' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Roles
+        </button>
+    </div>
+
+    <!-- Appointment Tabs -->
+    <div th:fragment="appointment(activeTab)" class="flex border-b border-gray-200">
+        <button type="button" onclick="window.location.href='/agenda'" th:class="${activeTab == 'agenda' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Agendar Cita
+        </button>
+        <button type="button" onclick="window.location.href='/citas/list'" th:class="${activeTab == 'historial' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Historial
+        </button>
+    </div>
+
+    <!-- Catalog Tabs -->
+    <div th:fragment="catalog(activeTab)" class="flex border-b border-gray-200">
+        <button type="button" onclick="window.location.href='/servicios/list'" th:class="${activeTab == 'servicios' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Servicios
+        </button>
+        <button type="button" onclick="window.location.href='/catalog/estado-lista-precio/list'" th:class="${activeTab == 'estadalistaprecio' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Estados de Precio
+        </button>
+        <button type="button" onclick="window.location.href='/listas-precio/list'" th:class="${activeTab == 'listas-precio' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Listas de Precio
+        </button>
+        <button type="button" onclick="window.location.href='/servicio-lista-precios/list'" th:class="${activeTab == 'servicio-lista-precios' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold'}">
+           Precios por Servicio
+        </button>
+    </div>
+
+    <!-- HR Tabs -->
+    <div th:fragment="hresources(activeTab)" class="flex border-b border-gray-200 overflow-x-auto">
+        <button type="button" onclick="window.location.href='/hresources/establecimiento/list'" th:class="${activeTab == 'establecimiento' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold whitespace-nowrap' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold whitespace-nowrap'}">
+           Establecimientos
+        </button>
+        <button type="button" onclick="window.location.href='/sucursales/list'" th:class="${activeTab == 'sucursales' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold whitespace-nowrap' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold whitespace-nowrap'}">
+           Sucursales
+        </button>
+        <button type="button" onclick="window.location.href='/empleados/list'" th:class="${activeTab == 'empleados' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold whitespace-nowrap' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold whitespace-nowrap'}">
+           Empleados
+        </button>
+        <button type="button" onclick="window.location.href='/hresources/horario/list'" th:class="${activeTab == 'horarios' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold whitespace-nowrap' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold whitespace-nowrap'}">
+           Horarios
+        </button>
+        <button type="button" onclick="window.location.href='/hresources/dia-laboral/list'" th:class="${activeTab == 'dia-laboral' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold whitespace-nowrap' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold whitespace-nowrap'}">
+           Días Laborales
+        </button>
+        <button type="button" onclick="window.location.href='/hresources/dia-descanso/list'" th:class="${activeTab == 'dia-descanso' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold whitespace-nowrap' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold whitespace-nowrap'}">
+           Días Descanso
+        </button>
+        <button type="button" onclick="window.location.href='/hresources/empleado-horario/list'" th:class="${activeTab == 'empleado-horario' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold whitespace-nowrap' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold whitespace-nowrap'}">
+           Asignar Horarios
+        </button>
+        <button type="button" onclick="window.location.href='/hresources/bloque-cita/list'" th:class="${activeTab == 'bloque-cita' ? '-mb-px mr-1 bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-rose-500 font-semibold whitespace-nowrap' : 'mr-1 bg-gray-100 inline-block py-2 px-4 text-rose-800 hover:text-rose-600 font-semibold whitespace-nowrap'}">
+           Bloques Cita
+        </button>
+    </div>
+</body>
+</html>
