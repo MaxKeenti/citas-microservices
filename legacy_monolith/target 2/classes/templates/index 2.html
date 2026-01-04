@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sistema de citas</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div class="mb-6 text-center">
+            <h1 class="text-2xl font-bold text-gray-800">Iniciar sesión</h1>
+        </div>
+        <form action="/" th:object="${loginDto}" method="post">
+            <div class="mb-4 text-center">
+                <h2 class="text-xl font-semibold text-gray-700">Ingresar al sistema</h2>
+            </div>
+            <div class="mb-4">
+                <p th:text="${errorLogin}" class="text-rose-500 text-sm text-center"></p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2 required">Usuario</label>
+                <input type="text" name="username" th:field="*{username}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-rose-500 text-xs italic mt-1"></p>
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
+                <input type="password" name="password" th:field="*{password}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" />
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-rose-500 text-xs italic mt-1"></p>
+            </div>
+            <div class="flex items-center justify-between flex-col gap-4">
+                <input type="submit" value="Ingresar" class="bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full cursor-pointer" />
+                <button type="button" onclick="window.location.href='/register'" class="inline-block align-baseline font-bold text-sm text-rose-500 pl-2 pr-2 hover:text-rose-800">
+                    ¿No tienes cuenta? Regístrate aquí
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

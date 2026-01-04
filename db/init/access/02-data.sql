@@ -1,0 +1,6 @@
+-- Admin User
+INSERT INTO public.tca01_persona (id_persona, fk_id_genero, tx_nombre, tx_primer_apellido, tx_segundo_apellido, fh_nacimiento)
+VALUES (1, 1, 'Admin', 'System', NULL, '1990-01-01');
+
+INSERT INTO public.tca02_usuario (id_usuario, fk_id_rol, tx_login, tx_password, st_activo)
+VALUES (1, 1, 'admin', 'password', true);

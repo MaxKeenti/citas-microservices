@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Services Catalog - Citas Microservices</title>
+</head>
+<body>
+    <h1>Available Services</h1>
+    <p><a href="/">Back to Home</a></p>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Duration (min)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {#for service in services}
+            <tr>
+                <td>{service.id}</td>
+                <td>{service.nombre}</td>
+                <td>{service.descripcion}</td>
+                <td>{service.duracion}</td>
+            </tr>
+            {/for}
+        </tbody>
+    </table>
+</body>
+</html>

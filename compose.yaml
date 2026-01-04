@@ -1,4 +1,5 @@
 services:
+  # Databases
   access-control-db:
     image: postgres:15
     environment:
@@ -9,6 +10,11 @@ services:
       - "5432:5432"
     volumes:
       - ./db/init/access:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d access_control_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   catalog-db:
     image: postgres:15
@@ -20,9 +26,14 @@ services:
       - "5433:5432"
     volumes:
       - ./db/init/catalog:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d catalog_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   hresources-db:
-    image: postgres:15
+    image: postgis/postgis:15-3.4
     environment:
       POSTGRES_DB: hresources_db
       POSTGRES_USER: user
@@ -31,6 +42,11 @@ services:
       - "5434:5432"
     volumes:
       - ./db/init/hresources:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d hresources_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   appointment-db:
     image: postgres:15
@@ -42,3 +58,87 @@ services:
       - "5435:5432"
     volumes:
       - ./db/init/appointment:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d appointment_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Microservices
+  access-control-service:
+    build:
+      context: ./access-control-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://access-control-db:5432/access_control_db
+      QUARKUS_HTTP_PORT: 8080
+    ports:
+      - "8081:8080"
+    depends_on:
+      access-control-db:
+        condition: service_healthy
+
+  catalog-service:
+    build:
+      context: ./catalog-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://catalog-db:5432/catalog_db
+      QUARKUS_HTTP_PORT: 8080
+    ports:
+      - "8082:8080"
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+
+  hresources-service:
+    build:
+      context: ./hresources-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://hresources-db:5432/hresources_db
+      QUARKUS_HTTP_PORT: 8080
+    ports:
+      - "8083:8080"
+    depends_on:
+      hresources-db:
+        condition: service_healthy
+
+  appointment-service:
+    build:
+      context: ./appointment-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://appointment-db:5432/appointment_db
+      QUARKUS_HTTP_PORT: 8080
+      QUARKUS_REST_CLIENT_HRESOURCES_API_URL: http://hresources-service:8080
+    ports:
+      - "8084:8080"
+    depends_on:
+      appointment-db:
+        condition: service_healthy
+
+  web-portal:
+    build:
+      context: ./web-portal
+      dockerfile: src/main/docker/Dockerfile.jvm
+    environment:
+      QUARKUS_HTTP_PORT: 8080
+      # Override REST Client URLs to point to internal docker service names
+      QUARKUS_REST_CLIENT_ACCESS_CONTROL_API_URL: http://access-control-service:8080
+      QUARKUS_REST_CLIENT_CATALOG_API_URL: http://catalog-service:8080
+      QUARKUS_REST_CLIENT_HRESOURCES_API_URL: http://hresources-service:8080
+      QUARKUS_REST_CLIENT_APPOINTMENT_API_URL: http://appointment-service:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - access-control-service
+      - catalog-service
+      - hresources-service
+      - appointment-service
+
+volumes:
+  access-control-data:
+  catalog-data:
+  hresources-data:
+  appointment-data:
