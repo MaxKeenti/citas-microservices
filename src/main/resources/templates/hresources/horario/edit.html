@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Editar Horario</title>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <!-- 1. Main Navigation -->
+    <div th:replace="~{fragments/nav :: main(activeModule='hresources')}"></div>
+
+    <div class="container mx-auto mt-10">
+        <!-- 2. Secondary Tabs -->
+        <div th:replace="~{fragments/tabs :: hresources(activeTab='horarios')}"></div>
+
+        <!-- 3. Content Card -->
+        <div class="p-6 bg-white rounded-b-lg shadow-lg rounded-tr-lg border border-gray-200">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Editar Horario</h1>
+        
+        <form th:action="@{/hresources/horario/update}" th:object="${horarioForm}" method="post">
+            <input type="hidden" th:field="*{id}" />
+            
+            <div class="mb-4">
+                <label for="idSucursal" class="block text-gray-700 text-sm font-bold mb-2">ID Sucursal:</label>
+                <input type="number" id="idSucursal" th:field="*{idSucursal}" 
+                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+
+            <div class="mb-4">
+                <label for="idDia" class="block text-gray-700 text-sm font-bold mb-2">ID Día (1-7):</label>
+                <input type="number" id="idDia" th:field="*{idDia}" 
+                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+
+            <div class="mb-4">
+                <label for="horaInicio" class="block text-gray-700 text-sm font-bold mb-2">Hora Inicio:</label>
+                <input type="time" id="horaInicio" th:field="*{horaInicio}" 
+                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+
+            <div class="mb-4">
+                <label for="horaFin" class="block text-gray-700 text-sm font-bold mb-2">Hora Fin:</label>
+                <input type="time" id="horaFin" th:field="*{horaFin}" 
+                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Actualizar
+                </button>
+                <button type="button" th:onclick="|window.location.href='@{/hresources/horario/list}'|" class="inline-block align-baseline font-bold text-sm text-teal-500 hover:text-teal-800">Volver a la lista</button>
+            </div>
+        </form>
+    </div>
+    </div>
+</body>
+</html>

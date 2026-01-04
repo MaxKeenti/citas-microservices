@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Editar Rol</title>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <!-- 1. Main Navigation -->
+    <div th:replace="~{fragments/nav :: main(activeModule='accesscontrol')}"></div>
+
+    <div class="container mx-auto mt-10">
+        <!-- 2. Secondary Tabs -->
+        <div th:replace="~{fragments/tabs :: accesscontrol(activeTab='roles')}"></div>
+
+        <!-- 3. Content Card -->
+        <div class="p-6 bg-white rounded-b-lg shadow-lg rounded-tr-lg border border-gray-200">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Editar Rol</h1>
+
+            <form th:action="@{/roles/save}" th:object="${rol}" method="post">
+                <input type="hidden" th:field="*{id}"/>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="nombre">
+                        Nombre
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                           id="nombre" type="text" th:field="*{nombre}" placeholder="Nombre del rol" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="descripcion">
+                        Descripción
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                           id="descripcion" type="text" th:field="*{descripcion}" placeholder="Descripción" required>
+                </div>
+
+                <div class="mb-6">
+                    <label class="md:w-2/3 block text-gray-500 font-bold">
+                        <input class="mr-2 leading-tight" type="checkbox" th:field="*{activo}">
+                        <span class="text-sm">
+                            Activo
+                        </span>
+                    </label>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <button class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        Guardar Cambios
+                    </button>
+                    <button type="button" th:onclick="|window.location.href='@{/roles/list}'|" class="inline-block align-baseline font-bold text-sm text-teal-500 hover:text-teal-800">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

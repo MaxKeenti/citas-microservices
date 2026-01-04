@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Editar Persona</title>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <!-- 1. Main Navigation -->
+    <div th:replace="~{fragments/nav :: main(activeModule='accesscontrol')}"></div>
+
+    <div class="container mx-auto mt-10">
+        <!-- 2. Secondary Tabs -->
+        <div th:replace="~{fragments/tabs :: accesscontrol(activeTab='personas')}"></div>
+
+        <!-- 3. Content Card -->
+        <div class="p-6 bg-white rounded-b-lg shadow-lg rounded-tr-lg border border-gray-200">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Editar Persona</h1>
+        <!-- Using path variable for ID in action -->
+        <form th:action="@{/personas/update/{id}(id=${personaId})}" th:object="${personaForm}" method="post">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Género</label>
+                <select th:field="*{idGenero}" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <option th:each="g : ${generos}" th:value="${g.id}" th:text="${g.nombre}"></option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                <input type="text" th:field="*{nombre}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <p th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="text-rose-500 text-xs italic mt-1"></p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Primer Apellido</label>
+                <input type="text" th:field="*{primerApellido}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <p th:if="${#fields.hasErrors('primerApellido')}" th:errors="*{primerApellido}" class="text-rose-500 text-xs italic mt-1"></p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Segundo Apellido</label>
+                <input type="text" th:field="*{segundoApellido}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Fecha de Nacimiento</label>
+                <input type="date" th:field="*{fechaNacimiento}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <p th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}" class="text-rose-500 text-xs italic mt-1"></p>
+            </div>
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Actualizar</button>
+                <button type="button" th:onclick="|window.location.href='@{/personas/list}'|" class="inline-block align-baseline font-bold text-sm text-teal-500 hover:text-teal-800">Volver a la lista</button>
+            </div>
+        </form>
+    </div>
+    </div>
+</body>
+</html>
