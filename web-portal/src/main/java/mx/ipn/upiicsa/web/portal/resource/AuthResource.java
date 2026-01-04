@@ -33,7 +33,7 @@ public class AuthResource {
     @Path("/login")
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance loginPage() {
-        return login.instance();
+        return login.data("error", null);
     }
 
     @POST
