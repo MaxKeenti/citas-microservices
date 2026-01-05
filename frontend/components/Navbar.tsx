@@ -47,7 +47,7 @@ export default async function Navbar() {
                     </Link>
                     <div className="flex items-center gap-4">
                         <span className="text-sm text-muted-foreground">
-                            Hola, {user?.nombre}
+                            Hola, {user?.nombre} {user?.primerApellido}
                         </span>
                          {/* Logout via API route */}
                          <form action="/api/auth/logout" method="POST">

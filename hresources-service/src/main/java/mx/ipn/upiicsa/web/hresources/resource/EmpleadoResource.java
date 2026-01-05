@@ -15,15 +15,32 @@ import jakarta.ws.rs.core.Response;
 import jakarta.transaction.Transactional;
 
 import mx.ipn.upiicsa.web.hresources.model.Empleado;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import mx.ipn.upiicsa.web.hresources.client.AccessControlClient;
 
 @Path("/employees")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EmpleadoResource {
 
+    @Inject
+    @RestClient
+    AccessControlClient accessControlClient;
+
     @GET
-    public List<Empleado> list() {
-        return Empleado.listAll();
+    public List<mx.ipn.upiicsa.web.hresources.dto.EmpleadoDto> list() {
+        List<Empleado> employees = Empleado.listAll();
+        return employees.stream().map(e -> {
+            try {
+                mx.ipn.upiicsa.web.hresources.dto.PersonaDto p = accessControlClient.getPersona(e.id);
+                return new mx.ipn.upiicsa.web.hresources.dto.EmpleadoDto(e.id, p.nombre, p.primerApellido,
+                        p.segundoApellido, e.sucursal);
+            } catch (Exception ex) {
+                // Fallback if user not found
+                return new mx.ipn.upiicsa.web.hresources.dto.EmpleadoDto(e.id, "Unknown", "Employee", "", e.sucursal);
+            }
+        }).collect(java.util.stream.Collectors.toList());
     }
 
     @GET

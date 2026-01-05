@@ -24,7 +24,7 @@ export default function Home() {
               <Button asChild size="lg" className="bg-white text-black hover:bg-gray-200">
                 <Link href="/register">Registrarse</Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-black">
+              <Button asChild variant="outline" size="lg" className="bg-white text-black hover:bg-gray-200">
                 <Link href="/login">Iniciar Sesión</Link>
               </Button>
             </div>
