@@ -10,7 +10,7 @@ export const sessionOptions: SessionOptions = {
   password: "complex_password_at_least_32_characters_long", // In real app, use ENV variable
   cookieName: "citas_microservices_session",
   cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
+    secure: false, // process.env.NODE_ENV === "production", // Disabled for local Docker deployment (HTTP)
     httpOnly: true,
   },
 };

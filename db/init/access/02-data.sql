@@ -4,3 +4,6 @@ VALUES (1, 1, 'Admin', 'System', NULL, '1990-01-01');
 
 INSERT INTO public.tca02_usuario (id_usuario, fk_id_rol, tx_login, tx_password, st_activo)
 VALUES (1, 1, 'admin', 'password', true);
+
+-- Reset sequences to avoid collision
+SELECT setval('tca01_persona_id_persona_seq', (SELECT MAX(id_persona) FROM tca01_persona));

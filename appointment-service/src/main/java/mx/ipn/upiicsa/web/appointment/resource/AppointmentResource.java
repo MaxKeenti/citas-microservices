@@ -9,6 +9,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -29,7 +30,30 @@ public class AppointmentResource {
     HResourcesClient hResourcesClient;
 
     @GET
-    public List<Cita> list() {
+    public List<Cita> list(@QueryParam("personaId") Integer personaId,
+            @QueryParam("empleadoId") Integer empleadoId,
+            @QueryParam("date") String date) {
+        if (personaId != null) {
+            return Cita.list("idPersona", personaId);
+        }
+        if (empleadoId != null && date != null) {
+            try {
+                // Parse date (YYYY-MM-DD)
+                java.time.LocalDate localDate = java.time.LocalDate.parse(date);
+                java.time.LocalDateTime start = localDate.atStartOfDay();
+                java.time.LocalDateTime end = localDate.atTime(java.time.LocalTime.MAX);
+
+                // Assuming fechaHora is LocalDateTime
+                return Cita.list("idEmpleado = ?1 and fechaHora >= ?2 and fechaHora <= ?3",
+                        empleadoId, start, end);
+            } catch (Exception e) {
+                // Invalid date format
+                throw new jakarta.ws.rs.BadRequestException("Invalid date format. Use YYYY-MM-DD");
+            }
+        }
+        if (empleadoId != null) {
+            return Cita.list("idEmpleado", empleadoId);
+        }
         return Cita.listAll();
     }
 

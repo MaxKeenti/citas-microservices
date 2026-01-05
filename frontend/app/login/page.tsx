@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -70,11 +71,16 @@ export default function LoginPage() {
               )}
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline" type="button">Cancel</Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
-            </Button>
+          <CardFooter className="justify-center flex-col gap-2">
+            <div className="flex justify-between w-full">
+              <Button variant="outline" type="button">Cancel</Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? 'Logging in...' : 'Login'}
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+                ¿No tienes cuenta? <Link href="/register" className="text-primary hover:underline">Regístrate</Link>
+            </p>
           </CardFooter>
         </form>
       </Card>

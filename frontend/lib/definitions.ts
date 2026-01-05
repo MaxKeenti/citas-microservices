@@ -24,5 +24,14 @@ export type Service = {
   id: number;
   nombre: string;
   descripcion: string;
-  duracion: string; // Duration string like "PT30M"
+  duracion: number; 
+  activo: boolean;
+};
+
+export type Employee = {
+    id: number;
+    nombre: string;
+    primerApellido: string;
+    segundoApellido?: string;
+    activo: boolean;
 };
