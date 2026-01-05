@@ -18,6 +18,7 @@ const sidebarItems = [
   { href: "/admin/employees", label: "Empleados", icon: Users },
   { href: "/admin/schedules", label: "Horarios", icon: CalendarDays },
   { href: "/admin/branches", label: "Sucursales", icon: MapPin },
+  { href: "/admin/price-lists", label: "Lista de Precios", icon: CalendarDays }, // Reusing Calendar or similar icon
 ];
 
 export function AdminSidebar() {
@@ -53,13 +54,15 @@ export function AdminSidebar() {
       </nav>
 
       <div className="p-4 border-t border-gray-800">
-        <Link
-          href="/api/auth/logout"
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-gray-800 hover:text-red-300 transition-colors"
-        >
-          <LogOut className="w-5 h-5" />
-          <span className="font-medium">Cerrar Sesión</span>
-        </Link>
+        <form action="/api/auth/logout" method="POST">
+            <button
+              type="submit"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-gray-800 hover:text-red-300 transition-colors w-full"
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="font-medium">Cerrar Sesión</span>
+            </button>
+        </form>
       </div>
     </div>
   );
