@@ -18,6 +18,7 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import mx.ipn.upiicsa.web.appointment.model.Cita;
+import mx.ipn.upiicsa.web.appointment.model.EstadoCita;
 import mx.ipn.upiicsa.web.appointment.client.HResourcesClient;
 
 @Path("/appointments")
@@ -54,7 +55,12 @@ public class AppointmentResource {
         if (empleadoId != null) {
             return Cita.list("idEmpleado", empleadoId);
         }
-        return Cita.listAll();
+        List<Cita> list = Cita.listAll();
+        System.out.println("Returning " + list.size() + " appointments");
+        if (!list.isEmpty()) {
+            System.out.println("First appointment status: " + list.get(0).estado);
+        }
+        return list;
     }
 
     @GET
@@ -67,6 +73,9 @@ public class AppointmentResource {
     @Transactional
     public Response create(Cita obj) {
         // TODO: Validate availability via hResourcesClient
+        if (obj.estado == null) {
+            obj.estado = EstadoCita.findById(1); // Default to Agendada
+        }
         obj.persist();
         // TODO: Notify hResources to blocking the slot?
         return Response.status(Response.Status.CREATED).entity(obj).build();
@@ -85,6 +94,25 @@ public class AppointmentResource {
         entity.idServicio = obj.idServicio;
         entity.idSucursal = obj.idSucursal;
         entity.idEmpleado = obj.idEmpleado;
+        if (obj.estado != null) {
+            entity.estado = obj.estado;
+        }
+        return entity;
+    }
+
+    @PUT
+    @Path("/{id}/status")
+    @Transactional
+    public Cita updateStatus(@PathParam("id") Integer id, EstadoCita status) {
+        Cita entity = Cita.findById(id);
+        if (entity == null) {
+            throw new jakarta.ws.rs.NotFoundException();
+        }
+        EstadoCita newStatus = EstadoCita.findById(status.id);
+        if (newStatus == null) {
+            throw new jakarta.ws.rs.BadRequestException("Invalid Status ID");
+        }
+        entity.estado = newStatus;
         return entity;
     }
 

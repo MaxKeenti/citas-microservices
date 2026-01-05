@@ -32,4 +32,8 @@ public class Cita extends PanacheEntityBase {
 
     @Column(name = "nu_duracion")
     public Integer duracion;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_id_estado")
+    public EstadoCita estado;
 }

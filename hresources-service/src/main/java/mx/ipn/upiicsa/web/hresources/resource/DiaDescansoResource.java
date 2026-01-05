@@ -1,19 +1,13 @@
 package mx.ipn.upiicsa.web.hresources.resource;
 
 import java.util.List;
-
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.transaction.Transactional;
-
 import mx.ipn.upiicsa.web.hresources.model.DiaDescanso;
+import mx.ipn.upiicsa.web.hresources.model.Empleado;
+import mx.ipn.upiicsa.web.hresources.dto.DiaDescansoDto;
 
 @Path("/days-off")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,21 +15,31 @@ import mx.ipn.upiicsa.web.hresources.model.DiaDescanso;
 public class DiaDescansoResource {
 
     @GET
-    public List<DiaDescanso> list() {
-        return DiaDescanso.listAll();
-    }
-
-    @GET
-    @Path("/{id}")
-    public DiaDescanso get(@PathParam("id") Integer id) {
-        return DiaDescanso.findById(id);
+    @Path("/employee/{id}")
+    public List<DiaDescansoDto> getByEmployee(@PathParam("id") Integer id) {
+        List<DiaDescanso> list = DiaDescanso.list("empleado.id", id);
+        return list.stream().map(d -> new DiaDescansoDto(d.id, d.empleado.id, d.fechaDescanso)).toList();
     }
 
     @POST
     @Transactional
-    public Response create(DiaDescanso obj) {
-        obj.persist();
-        return Response.status(Response.Status.CREATED).entity(obj).build();
+    public Response create(DiaDescansoDto dto) {
+        Empleado emp = Empleado.findById(dto.idEmpleado);
+        if (emp == null)
+            throw new NotFoundException("Employee not found");
+
+        // Prevent duplicates
+        long count = DiaDescanso.count("empleado.id = ?1 and fechaDescanso = ?2", dto.idEmpleado, dto.fecha);
+        if (count > 0)
+            return Response.status(Response.Status.CONFLICT).build();
+
+        DiaDescanso entity = new DiaDescanso();
+        entity.empleado = emp;
+        entity.fechaDescanso = dto.fecha;
+        entity.persist();
+
+        return Response.status(Response.Status.CREATED)
+                .entity(new DiaDescansoDto(entity.id, entity.empleado.id, entity.fechaDescanso)).build();
     }
 
     @DELETE
