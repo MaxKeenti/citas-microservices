@@ -34,11 +34,15 @@ public class EmpleadoResource {
         return employees.stream().map(e -> {
             try {
                 mx.ipn.upiicsa.web.hresources.dto.PersonaDto p = accessControlClient.getPersona(e.id);
+                mx.ipn.upiicsa.web.hresources.dto.SucursalDto sDto = new mx.ipn.upiicsa.web.hresources.dto.SucursalDto(
+                        e.sucursal.id, e.sucursal.nombre);
                 return new mx.ipn.upiicsa.web.hresources.dto.EmpleadoDto(e.id, p.nombre, p.primerApellido,
-                        p.segundoApellido, e.sucursal);
+                        p.segundoApellido, sDto);
             } catch (Exception ex) {
                 // Fallback if user not found
-                return new mx.ipn.upiicsa.web.hresources.dto.EmpleadoDto(e.id, "Unknown", "Employee", "", e.sucursal);
+                mx.ipn.upiicsa.web.hresources.dto.SucursalDto sDto = new mx.ipn.upiicsa.web.hresources.dto.SucursalDto(
+                        e.sucursal.id, e.sucursal.nombre);
+                return new mx.ipn.upiicsa.web.hresources.dto.EmpleadoDto(e.id, "Unknown", "Employee", "", sDto);
             }
         }).collect(java.util.stream.Collectors.toList());
     }
@@ -75,5 +79,17 @@ public class EmpleadoResource {
     @Transactional
     public void delete(@PathParam("id") Integer id) {
         Empleado.deleteById(id);
+    }
+
+    @GET
+    @Path("/{id}/horarios")
+    public List<mx.ipn.upiicsa.web.hresources.dto.HorarioDto> getHorarios(@PathParam("id") Integer id) {
+        List<mx.ipn.upiicsa.web.hresources.model.EmpleadoHorario> ehList = mx.ipn.upiicsa.web.hresources.model.EmpleadoHorario
+                .list("idPersona", id);
+        return ehList.stream().map(eh -> {
+            mx.ipn.upiicsa.web.hresources.model.Horario h = eh.horario;
+            return new mx.ipn.upiicsa.web.hresources.dto.HorarioDto(h.id, h.diaLaboral.id, h.diaLaboral.nombre,
+                    h.horaInicio, h.horaFin);
+        }).collect(java.util.stream.Collectors.toList());
     }
 }

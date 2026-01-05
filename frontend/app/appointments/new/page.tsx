@@ -65,21 +65,17 @@ export default function NewAppointmentPage() {
         if (selectedDate && selectedEmployee && selectedService) {
             setLoadingSlots(true);
             // Fetch busy slots
-            fetch(`/api/availability?date=${selectedDate}&employeeId=${selectedEmployee.id}`)
+            fetch(`/api/availability?date=${selectedDate}&employeeId=${selectedEmployee.id}&serviceDuration=${selectedService.duracion || 30}`)
                 .then(res => res.json())
-                .then(busySlots => {
-                    // Start generating slots
-                    const allSlots = generateSlots(9, 18, selectedService.duracion || 30);
-                    
-                    // Filter busy
-                    // busySlots is Array of Cita objects { fechaHora: "YYYY-MM-DDTHH:MM:SS" }
-                    const busyTimes = busySlots.map((cita: any) => {
-                        return cita.fechaHora.split("T")[1].substring(0, 5);
-                    });
-
-                    // Simple exact match exclusion (Logic can be improved for overlaps)
-                    const free = allSlots.filter(time => !busyTimes.includes(time));
-                    setAvailableSlots(free);
+                .then(slots => {
+                    // slots is Array of strings ["HH:MM:SS", ...]
+                    // We just need to format them to HH:MM
+                    if (Array.isArray(slots)) {
+                        const formatted = slots.map((t: string) => t.substring(0, 5));
+                        setAvailableSlots(formatted);
+                    } else {
+                        setAvailableSlots([]);
+                    }
                     setLoadingSlots(false);
                 })
                 .catch(err => {

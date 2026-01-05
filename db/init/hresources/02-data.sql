@@ -17,7 +17,8 @@ INSERT INTO public.tce08_horario (id_horario, fk_id_sucursal, fk_id_dia, tm_inic
 (2, 1, 2, '09:00:00', '18:00:00'), -- Martes
 (3, 1, 3, '09:00:00', '18:00:00'), -- Miércoles
 (4, 1, 4, '09:00:00', '18:00:00'), -- Jueves
-(5, 1, 5, '09:00:00', '18:00:00'); -- Viernes
+(5, 1, 5, '09:00:00', '18:00:00'), -- Viernes
+(6, 1, 6, '09:00:00', '18:00:00'); -- Sábado
 
 -- Assign Horarios to Empleado 2
 INSERT INTO public.tce06_empleado_horario (fk_id_horario, fk_id_persona) VALUES
@@ -25,7 +26,8 @@ INSERT INTO public.tce06_empleado_horario (fk_id_horario, fk_id_persona) VALUES
 (2, 2),
 (3, 2),
 (4, 2),
-(5, 2);
+(5, 2),
+(6, 2);
 
 -- Reset Sequences
 ALTER SEQUENCE public.tce01_establecimiento_id_establecimiento_seq RESTART WITH 2;
