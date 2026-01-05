@@ -19,6 +19,7 @@ const sidebarItems = [
   { href: "/admin/schedules", label: "Horarios", icon: CalendarDays },
   { href: "/admin/branches", label: "Sucursales", icon: MapPin },
   { href: "/admin/price-lists", label: "Lista de Precios", icon: CalendarDays },
+  { href: "/admin/days-off", label: "Días de Descanso", icon: CalendarDays },
   { href: "/admin/appointments", label: "Citas", icon: CalendarDays }, // Using Calendar for appointments too
 ];
 

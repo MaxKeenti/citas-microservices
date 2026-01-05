@@ -41,6 +41,20 @@ public class AvailabilityResource {
         LocalDate date = LocalDate.parse(dateString);
         int dayOfWeek = date.getDayOfWeek().getValue(); // 1=Mon, 7=Sun
 
+        // 1.1 Check Days Off
+        try {
+            List<mx.ipn.upiicsa.web.appointment.dto.DiaDescansoDto> daysOff = hResourcesClient.getDaysOff(employeeId);
+            boolean isDayOff = daysOff.stream().anyMatch(d -> d.fecha.equals(date));
+            if (isDayOff) {
+                return new ArrayList<>(); // Day off, no availability
+            }
+        } catch (Exception e) {
+            // Log error but continue? Or fail safe?
+            // For now, if we can't reach hresources to check days off, proceed (or maybe
+            // should handle better)
+            System.err.println("Error fetching days off: " + e.getMessage());
+        }
+
         // 2. Fetch Employee Schedule
         List<HorarioDto> schedules = hResourcesClient.getHorarios(employeeId);
         // Find schedule for this day

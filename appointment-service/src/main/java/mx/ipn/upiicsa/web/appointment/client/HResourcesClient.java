@@ -17,4 +17,8 @@ public interface HResourcesClient {
     @GET
     @Path("/employees/{id}/horarios")
     List<mx.ipn.upiicsa.web.appointment.dto.HorarioDto> getHorarios(@PathParam("id") Integer id);
+
+    @GET
+    @Path("/days-off/employee/{id}")
+    List<mx.ipn.upiicsa.web.appointment.dto.DiaDescansoDto> getDaysOff(@PathParam("id") Integer id);
 }
