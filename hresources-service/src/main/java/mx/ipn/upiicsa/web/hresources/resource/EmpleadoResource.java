@@ -90,8 +90,41 @@ public class EmpleadoResource {
                 .list("idPersona", id);
         return ehList.stream().map(eh -> {
             mx.ipn.upiicsa.web.hresources.model.Horario h = eh.horario;
-            return new mx.ipn.upiicsa.web.hresources.dto.HorarioDto(h.id, h.diaLaboral.id, h.diaLaboral.nombre,
-                    h.horaInicio, h.horaFin);
+            return new mx.ipn.upiicsa.web.hresources.dto.HorarioDto(
+                    h.id,
+                    h.sucursal != null ? h.sucursal.id : null,
+                    h.sucursal != null ? h.sucursal.nombre : null,
+                    h.diaLaboral.id,
+                    h.diaLaboral.nombre,
+                    h.horaInicio,
+                    h.horaFin);
         }).toList();
+    }
+
+    @POST
+    @Path("/{id}/horarios")
+    @Transactional
+    public Response assignSchedule(@PathParam("id") Integer id,
+            mx.ipn.upiicsa.web.hresources.dto.HorarioAssignmentDto dto) {
+        // Check duplication
+        long count = mx.ipn.upiicsa.web.hresources.model.EmpleadoHorario.count("idPersona = ?1 and idHorario = ?2", id,
+                dto.idHorario);
+        if (count > 0) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+
+        mx.ipn.upiicsa.web.hresources.model.EmpleadoHorario eh = new mx.ipn.upiicsa.web.hresources.model.EmpleadoHorario();
+        eh.idPersona = id;
+        eh.idHorario = dto.idHorario;
+        eh.persist();
+
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+    @DELETE
+    @Path("/{id}/horarios/{idHorario}")
+    @Transactional
+    public void removeSchedule(@PathParam("id") Integer id, @PathParam("idHorario") Integer idHorario) {
+        mx.ipn.upiicsa.web.hresources.model.EmpleadoHorario.delete("idPersona = ?1 and idHorario = ?2", id, idHorario);
     }
 }

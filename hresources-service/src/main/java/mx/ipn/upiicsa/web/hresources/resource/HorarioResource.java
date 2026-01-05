@@ -22,14 +22,35 @@ import mx.ipn.upiicsa.web.hresources.model.Horario;
 public class HorarioResource {
 
     @GET
-    public List<Horario> list() {
-        return Horario.listAll();
+    @SuppressWarnings("null")
+    public List<mx.ipn.upiicsa.web.hresources.dto.HorarioDto> list() {
+        List<Horario> horarios = Horario.listAll();
+        return horarios.stream().map(h -> new mx.ipn.upiicsa.web.hresources.dto.HorarioDto(
+                h.id,
+                h.sucursal != null ? h.sucursal.id : null,
+                h.sucursal != null ? h.sucursal.nombre : null, // Assuming HorarioDto has simple fields, checking
+                                                               // constructor
+                h.diaLaboral.id,
+                h.diaLaboral.nombre,
+                h.horaInicio,
+                h.horaFin)).toList();
     }
 
     @GET
     @Path("/{id}")
-    public Horario get(@PathParam("id") Integer id) {
-        return Horario.findById(id);
+    @SuppressWarnings("null")
+    public mx.ipn.upiicsa.web.hresources.dto.HorarioDto get(@PathParam("id") Integer id) {
+        Horario h = Horario.findById(id);
+        if (h == null)
+            return null;
+        return new mx.ipn.upiicsa.web.hresources.dto.HorarioDto(
+                h.id,
+                h.sucursal != null ? h.sucursal.id : null,
+                h.sucursal != null ? h.sucursal.nombre : null,
+                h.diaLaboral.id,
+                h.diaLaboral.nombre,
+                h.horaInicio,
+                h.horaFin);
     }
 
     @POST
