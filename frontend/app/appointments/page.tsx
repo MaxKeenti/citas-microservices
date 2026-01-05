@@ -21,7 +21,11 @@ export default function MyAppointmentsPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  const [services, setServices] = useState<Record<number, string>>({});
+  const [employees, setEmployees] = useState<Record<number, string>>({});
+
   useEffect(() => {
+    // 1. Fetch Appointments
     fetch("/api/appointments")
       .then((res) => {
         if (res.status === 401) {
@@ -31,11 +35,8 @@ export default function MyAppointmentsPage() {
         return res.json();
       })
       .then((data) => {
-        if (data) {
-          // If it's an array
-          if (Array.isArray(data)) {
+        if (data && Array.isArray(data)) {
             setAppointments(data);
-          }
         }
         setLoading(false);
       })
@@ -43,6 +44,30 @@ export default function MyAppointmentsPage() {
         console.error(err);
         setLoading(false);
       });
+
+    // 2. Fetch Services for lookup
+    fetch("/api/services")
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                // Create map ID -> Name
+                const map: Record<number, string> = {};
+                data.forEach((s: any) => map[s.id] = s.nombre);
+                setServices(map);
+            }
+        });
+
+    // 3. Fetch Employees for lookup
+    fetch("/api/employees")
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                 const map: Record<number, string> = {};
+                 data.forEach((e: any) => map[e.id] = `${e.nombre} ${e.primerApellido}`);
+                 setEmployees(map);
+            }
+        });
+
   }, [router]);
 
   return (
@@ -67,13 +92,21 @@ export default function MyAppointmentsPage() {
               <CardHeader>
                 <CardTitle>Cita #{cita.id}</CardTitle>
                 <CardDescription>
-                  {new Date(cita.fechaHora).toLocaleString()}
+                  {new Date(cita.fechaHora).toLocaleString('es-MX', { 
+                      dateStyle: 'full', 
+                      timeStyle: 'short' 
+                  })}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p>Duración: {cita.duracion} min</p>
-                <p>Servicio ID: {cita.idServicio}</p>
-                 {/* TODO: Resolve Service Name from Catalog Service */}
+                <div className="space-y-1">
+                    <p><strong>Servicio:</strong> {services[cita.idServicio] || `ID: ${cita.idServicio}`}</p>
+                    <p><strong>Duración:</strong> {cita.duracion} min</p>
+                    {/* Assuming Cita has idEmpleado, if not we might default or ignore */}
+                    { (cita as any).idEmpleado && (
+                         <p><strong>Profesional:</strong> {employees[(cita as any).idEmpleado] || `ID: ${(cita as any).idEmpleado}`}</p>
+                    )}
+                </div>
               </CardContent>
             </Card>
           ))}

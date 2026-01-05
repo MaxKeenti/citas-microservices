@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sessionOptions, SessionData } from "@/lib/session";
 import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
   try {
@@ -64,14 +65,23 @@ export async function POST(request: NextRequest) {
 
     const userData = await loginRes.json();
     
-    const session = await getIronSession<SessionData>(request, NextResponse.next(), sessionOptions);
+    // Correct usage for Next.js App Router
+    const cookieStore = await cookies();
+    const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
+    
+    // Map Persona data to User session structure explicitly to match login route
     session.user = {
-      ...userData,
-      isLoggedIn: true,
+        id: userData.id,
+        nombre: userData.nombre,
+        primerApellido: userData.primerApellido,
+        segundoApellido: userData.segundoApellido,
+        roles: ["user"] // Default role for new registrants
     };
+    session.isLoggedIn = true;
+    
     await session.save();
 
-    return NextResponse.json(userData);
+    return NextResponse.json(session.user);
 
   } catch (error) {
     console.error("Registration error:", error);
