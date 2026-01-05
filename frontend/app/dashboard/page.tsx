@@ -56,9 +56,8 @@ export default async function DashboardPage() {
                      {/* <p><strong>Email:</strong> {user.email || 'No disponible'}</p> */}
                  </div>
                  <div className="mt-4">
-                    <Button asChild variant="ghost" size="sm" className="px-0">
-                         {/* Link to profile edit if implemented, or just placeholder */}
-                         <span className="text-muted-foreground cursor-not-allowed">Editar Perfil (Próximamente)</span>
+                     <Button asChild variant="ghost" size="sm" className="px-0">
+                         <Link href="/profile" className="text-primary hover:underline">Editar Perfil</Link>
                     </Button>
                  </div>
              </CardContent>

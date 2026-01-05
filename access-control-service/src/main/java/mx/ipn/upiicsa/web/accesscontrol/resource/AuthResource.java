@@ -113,4 +113,30 @@ public class AuthResource {
 
         return Response.ok(p).build();
     }
+
+    @jakarta.ws.rs.PUT
+    @Path("/profile")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response updateProfile(mx.ipn.upiicsa.web.accesscontrol.dto.ProfileUpdateDto dto) {
+        if (dto.id == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("ID required").build();
+        }
+
+        Persona persona = Persona.findById(dto.id);
+        if (persona == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        persona.nombre = dto.nombre;
+        persona.primerApellido = dto.primerApellido;
+        persona.segundoApellido = dto.segundoApellido;
+        persona.fechaNacimiento = dto.fechaNacimiento;
+        persona.idGenero = dto.idGenero;
+
+        persona.persist(); // Not strictly needed inside transaction but good for clarity
+
+        return Response.ok(persona).build();
+    }
 }

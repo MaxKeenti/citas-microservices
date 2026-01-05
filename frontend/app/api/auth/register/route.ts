@@ -75,6 +75,8 @@ export async function POST(request: NextRequest) {
         nombre: userData.nombre,
         primerApellido: userData.primerApellido,
         segundoApellido: userData.segundoApellido,
+        fechaNacimiento: userData.fechaNacimiento,
+        idGenero: userData.idGenero,
         roles: ["user"] // Default role for new registrants
     };
     session.isLoggedIn = true;

@@ -3,6 +3,8 @@ export type User = {
   nombre: string;
   primerApellido: string;
   segundoApellido?: string;
+  fechaNacimiento?: string | number[]; // LocalDate serialization varies
+  idGenero?: number;
   roles: string[];
 };
 

@@ -36,6 +36,8 @@ export async function POST(request: Request) {
         nombre: persona.nombre,
         primerApellido: persona.primerApellido,
         segundoApellido: persona.segundoApellido,
+        fechaNacimiento: persona.fechaNacimiento,
+        idGenero: persona.idGenero,
         // Backend doesn't return roles in Persona directly yet, 
         // but we can assume basic rights or fetch them if needed.
         // For now, let's treat everyone as authenticated.
