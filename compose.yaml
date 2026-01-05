@@ -137,6 +137,24 @@ services:
       - hresources-service
       - appointment-service
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      # Browser talks to this URL (public), but SSR happens inside container
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
+      # Server-side calls to backend services
+      ACCESS_CONTROL_SERVICE_URL: http://access-control-service:8080
+      CATALOG_SERVICE_URL: http://catalog-service:8080
+      HRESOURCES_SERVICE_URL: http://hresources-service:8080
+      APPOINTMENT_SERVICE_URL: http://appointment-service:8080
+    depends_on:
+      - access-control-service
+      - catalog-service
+
 volumes:
   access-control-data:
   catalog-data:
