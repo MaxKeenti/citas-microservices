@@ -39,6 +39,11 @@ export default async function Navbar() {
                     <Link href="/dashboard" className="text-sm font-medium hover:underline">
                         Panel
                     </Link>
+                    {user?.roles?.includes("admin") && (
+                        <Link href="/admin" className="text-sm font-medium hover:underline text-indigo-600">
+                            Administración
+                        </Link>
+                    )}
                     <Link href="/appointments" className="text-sm font-medium hover:underline">
                         Mis Citas
                     </Link>

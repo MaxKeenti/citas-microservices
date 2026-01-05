@@ -7,11 +7,7 @@ export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(request, NextResponse.next(), sessionOptions);
   session.destroy();
   
-  // Use Host header to fix Docker internal hostname issue
+  // Use Host header to default to correct browser-facing URL
   const host = request.headers.get("host") || "localhost:3000";
-  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
-  const url = new URL("/login", `${protocol}://${host}`);
-  
-  const res = NextResponse.redirect(url);
-  return res;
+  return NextResponse.redirect(new URL("/login", `http://${host}`));
 }
