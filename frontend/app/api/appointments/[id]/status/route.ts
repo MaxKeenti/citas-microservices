@@ -13,6 +13,13 @@ export async function PUT(
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    const hasAdminRole = session.user.roles.includes("admin");
+    const hasEmployeeRole = session.user.roles.includes("employee");
+
+    if (!hasAdminRole && !hasEmployeeRole) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const serviceUrl = process.env.APPOINTMENT_SERVICE_URL || "http://appointment-service:8080";
 

@@ -6,15 +6,27 @@ import { cookies } from "next/headers";
 export async function GET(request: NextRequest) {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
 
-    if (!session.isLoggedIn || !session.user || !session.user.roles.includes("admin")) { // Basic role check
+    if (!session.isLoggedIn || !session.user) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const hasAdminRole = session.user.roles.includes("admin");
+    const hasEmployeeRole = session.user.roles.includes("employee");
+
+    if (!hasAdminRole && !hasEmployeeRole) {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const serviceUrl = process.env.APPOINTMENT_SERVICE_URL || "http://appointment-service:8080";
+    let url = `${serviceUrl}/appointments`;
+
+    // If employee but not admin, filter by their ID
+    if (hasEmployeeRole && !hasAdminRole) {
+        url += `?empleadoId=${session.user.id}`;
+    }
 
     try {
-        // Admin gets all appointments
-        const res = await fetch(`${serviceUrl}/appointments`, {
+        const res = await fetch(url, {
             headers: {
                 "Content-Type": "application/json",
             },
