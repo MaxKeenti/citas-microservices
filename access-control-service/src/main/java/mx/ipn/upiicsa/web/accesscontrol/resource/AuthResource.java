@@ -34,21 +34,30 @@ public class AuthResource {
 
         if (usuario != null) {
             // Check password hash
-            // NOTE: Legacy data might be plain text if not migrated properly,
-            // but we assume SHA-512 as per legacy RegistrationController.
-            // If verification fails, we could try plain text as fallback (optional
-            // migration strategy).
             boolean matches = PasswordEncoder.matches(loginDto.password, usuario.password);
 
-            // Fallback for dev/initial seed (admin/password might be plain text in our
-            // seed?)
+            // Fallback for dev/initial seed
             if (!matches && loginDto.password.equals(usuario.password)) {
                 matches = true;
             }
 
             if (matches) {
                 if (Boolean.TRUE.equals(usuario.activo)) {
-                    return Response.ok(usuario.persona).build();
+                    String roleName = "user";
+                    if (usuario.idRol == 1)
+                        roleName = "admin";
+                    if (usuario.idRol == 2)
+                        roleName = "employee";
+
+                    mx.ipn.upiicsa.web.accesscontrol.dto.UserSessionDto sessionDto = new mx.ipn.upiicsa.web.accesscontrol.dto.UserSessionDto(
+                            usuario.persona.id,
+                            usuario.persona.nombre,
+                            usuario.persona.primerApellido,
+                            usuario.persona.segundoApellido,
+                            usuario.persona.fechaNacimiento,
+                            usuario.persona.idGenero,
+                            java.util.List.of(roleName));
+                    return Response.ok(sessionDto).build();
                 } else {
                     return Response.status(Response.Status.UNAUTHORIZED).entity("El usuario está inactivo").build();
                 }

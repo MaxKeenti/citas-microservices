@@ -31,6 +31,7 @@ export async function POST(request: Request) {
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
     
     // Map Persona to User session
+    // Map Backend DTO to Frontend Session
     session.user = {
         id: persona.id,
         nombre: persona.nombre,
@@ -38,10 +39,7 @@ export async function POST(request: Request) {
         segundoApellido: persona.segundoApellido,
         fechaNacimiento: persona.fechaNacimiento,
         idGenero: persona.idGenero,
-        // Backend doesn't return roles in Persona directly yet, 
-        // but we can assume basic rights or fetch them if needed.
-        // For now, let's treat everyone as authenticated.
-        roles: ["user"] 
+        roles: persona.roles || ["user"] // Use roles from backend or default
     };
     session.isLoggedIn = true;
     
