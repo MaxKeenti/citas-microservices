@@ -73,6 +73,26 @@ public class AuthResource {
             return Response.status(Response.Status.CONFLICT).entity("El nombre de usuario ya existe").build();
         }
 
+        // Validate Email
+        if (!form.username.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("El nombre de usuario debe ser un correo electrónico válido").build();
+        }
+
+        // Validate Password Complexity
+        if (form.password.length() < 8) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("La contraseña debe tener al menos 8 caracteres")
+                    .build();
+        }
+        if (!form.password.matches(".*[0-9].*")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("La contraseña debe tener al menos un número")
+                    .build();
+        }
+        if (!form.password.matches(".*[^A-Za-z0-9].*")) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("La contraseña debe tener al menos un carácter especial").build();
+        }
+
         // Create Persona
         Persona p = new Persona();
         p.idGenero = form.idGenero;

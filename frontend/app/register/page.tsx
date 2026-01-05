@@ -31,8 +31,11 @@ const formSchema = z.object({
   segundoApellido: z.string().optional(),
   fechaNacimiento: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Formato inválido (YYYY-MM-DD)" }),
   idGenero: z.string().min(1, { message: "Seleccione un género" }),
-  username: z.string().min(4, { message: "El usuario debe tener al menos 4 caracteres" }),
-  password: z.string().min(8, { message: "La contraseña debe tener al menos 8 caracteres" }),
+  username: z.string().email({ message: "El usuario debe ser un correo electrónico válido" }),
+  password: z.string()
+    .min(8, { message: "La contraseña debe tener al menos 8 caracteres" })
+    .regex(/[0-9]/, { message: "La contraseña debe contener al menos un número" })
+    .regex(/[^A-Za-z0-9]/, { message: "La contraseña debe contener al menos un carácter especial" }),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Las contraseñas no coinciden",

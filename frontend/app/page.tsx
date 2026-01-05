@@ -1,65 +1,82 @@
+
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section */}
+      <section className="w-full py-24 lg:py-32 xl:py-48 bg-black text-white relative">
+        <div className="absolute inset-0 opacity-20">
+             {/* Placeholder for background image */}
+             <Image src="/hero-barber.jpg" alt="Barber Shop" fill className="object-cover" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="container relative z-10 px-4 md:px-6 text-center">
+          <div className="flex flex-col items-center space-y-4">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+              BarberShop Services
+            </h1>
+            <p className="mx-auto max-w-[700px] text-gray-300 md:text-xl">
+              Estilo clásico para el hombre moderno. Agenda tu cita y vive la experiencia.
+            </p>
+            <div className="space-x-4">
+              <Button asChild size="lg" className="bg-white text-black hover:bg-gray-200">
+                <Link href="/register">Registrarse</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-black">
+                <Link href="/login">Iniciar Sesión</Link>
+              </Button>
+            </div>
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Services Section */}
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-900">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Nuestros Servicios</h2>
+             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+               Ofrecemos una amplia gama de servicios de barbería de alta calidad.
+             </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+              <div className="flex flex-col items-center space-y-2 border p-6 rounded-lg bg-background shadow-sm">
+                  <div className="p-2 bg-black text-white rounded-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 12h12"/><path d="M6 20h12"/><path d="M6 4h12"/><path d="M6 12v8"/><path d="M18 12v8"/><path d="M18 4v8"/><path d="M6 4v8"/></svg>
+                  </div>
+                  <h3 className="text-xl font-bold">Corte de Cabello</h3>
+                  <p className="text-muted-foreground text-center">Cortes clásicos, fades, y estilos modernos a tu medida.</p>
+              </div>
+              <div className="flex flex-col items-center space-y-2 border p-6 rounded-lg bg-background shadow-sm">
+                  <div className="p-2 bg-black text-white rounded-full">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 11v2a5 5 0 0 0 10 0v-2"/></svg>
+                  </div>
+                  <h3 className="text-xl font-bold">Afeitado y Barba</h3>
+                  <p className="text-muted-foreground text-center">Afeitado tradicional con toalla caliente y perfilado de barba.</p>
+              </div>
+              <div className="flex flex-col items-center space-y-2 border p-6 rounded-lg bg-background shadow-sm">
+                   <div className="p-2 bg-black text-white rounded-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/></svg>
+                   </div>
+                  <h3 className="text-xl font-bold">Tratamientos</h3>
+                  <p className="text-muted-foreground text-center">Mascarillas faciales, tintes y tratamientos capilares.</p>
+              </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="w-full py-6 bg-black text-white">
+          <div className="container px-4 md:px-6 flex flex-col md:flex-row justify-between items-center">
+              <p className="text-xs text-gray-400">© 2026 BarberShop Inc. Todos los derechos reservados.</p>
+              <nav className="flex gap-4 sm:gap-6 mt-4 md:mt-0">
+                  <Link className="text-xs hover:underline underline-offset-4" href="#">Términos de Servicio</Link>
+                  <Link className="text-xs hover:underline underline-offset-4" href="#">Privacidad</Link>
+              </nav>
+          </div>
+      </footer>
     </div>
   );
 }
