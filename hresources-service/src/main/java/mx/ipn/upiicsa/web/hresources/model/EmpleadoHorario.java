@@ -6,15 +6,15 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tce09_empleado_horario")
+@Table(name = "tce06_empleado_horario")
 @IdClass(EmpleadoHorarioId.class)
 public class EmpleadoHorario extends PanacheEntityBase {
     @Id
-    @Column(name = "fk_id_empleado")
-    public Integer idEmpleado;
+    @Column(name = "fk_id_persona")
+    public Integer idPersona;
 
     @ManyToOne
-    @JoinColumn(name = "fk_id_empleado", insertable = false, updatable = false)
+    @JoinColumn(name = "fk_id_persona", insertable = false, updatable = false)
     public Empleado empleado;
 
     @Id
@@ -27,7 +27,7 @@ public class EmpleadoHorario extends PanacheEntityBase {
 }
 
 class EmpleadoHorarioId implements Serializable {
-    public Integer idEmpleado;
+    public Integer idPersona;
     public Integer idHorario;
 
     @Override
@@ -37,11 +37,11 @@ class EmpleadoHorarioId implements Serializable {
         if (o == null || getClass() != o.getClass())
             return false;
         EmpleadoHorarioId that = (EmpleadoHorarioId) o;
-        return Objects.equals(idEmpleado, that.idEmpleado) && Objects.equals(idHorario, that.idHorario);
+        return Objects.equals(idPersona, that.idPersona) && Objects.equals(idHorario, that.idHorario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idEmpleado, idHorario);
+        return Objects.hash(idPersona, idHorario);
     }
 }

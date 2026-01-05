@@ -1,0 +1,39 @@
+export type User = {
+  id: number;
+  nombre: string;
+  primerApellido: string;
+  segundoApellido?: string;
+  fechaNacimiento?: string | number[]; // LocalDate serialization varies
+  idGenero?: number;
+  roles: string[];
+};
+
+export type SessionPayload = {
+  user: User;
+  isLoggedIn: boolean;
+};
+
+export type LoginFormState = {
+  errors?: {
+    username?: string[];
+    password?: string[];
+    general?: string[];
+  };
+  message?: string;
+};
+
+export type Service = {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  duracion: number; 
+  activo: boolean;
+};
+
+export type Employee = {
+    id: number;
+    nombre: string;
+    primerApellido: string;
+    segundoApellido?: string;
+    activo: boolean;
+};

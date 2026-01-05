@@ -41,27 +41,31 @@ public class UsuarioResource {
 
     @POST
     @Transactional
-    public Response create(Usuario usuario) {
-        // Logic to link with Persona?
-        // Assuming payload has valid referencing IDs or nested object?
-        // For simplicity now, expect ID to be set if linking to existing Persona, OR
-        // new Persona.
-        // But Usuario ID IS ForeignKey to Persona ID.
-        // So we probably need to create Persona FIRST, then Usuario.
-        // Or receive a composite DTO.
-        // Legacy: UsuarioController created UsuarioJpa with manual ID setting from
-        // Form.
-
-        // This is a rough migration.
-        if (usuario.persona != null && usuario.persona.id == null) {
-            usuario.persona.persist();
-            usuario.id = usuario.persona.id;
-        } else if (usuario.id != null) {
-            // Link to existing
+    public Response create(mx.ipn.upiicsa.web.accesscontrol.dto.UserCreationDto form) {
+        // Check if user exists
+        if (Usuario.count("login", form.username) > 0) {
+            return Response.status(Response.Status.CONFLICT).entity("El nombre de usuario ya existe").build();
         }
 
-        usuario.persist();
-        return Response.status(Response.Status.CREATED).entity(usuario).build();
+        // Create Persona
+        Persona p = new Persona();
+        p.idGenero = form.idGenero;
+        p.nombre = form.nombre;
+        p.primerApellido = form.primerApellido;
+        p.segundoApellido = form.segundoApellido;
+        p.fechaNacimiento = form.fechaNacimiento;
+        p.persist(); // Id generated
+
+        // Create Usuario
+        Usuario u = new Usuario();
+        u.id = p.id; // Shared PK
+        u.idRol = form.idRol != null ? form.idRol : 3; // Default to Client
+        u.login = form.username;
+        u.password = mx.ipn.upiicsa.web.accesscontrol.util.PasswordEncoder.encode(form.password);
+        u.activo = true;
+        u.persist();
+
+        return Response.status(Response.Status.CREATED).entity(p).build(); // Return Persona with ID
     }
 
     @PUT

@@ -9,6 +9,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -17,6 +18,7 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import mx.ipn.upiicsa.web.appointment.model.Cita;
+import mx.ipn.upiicsa.web.appointment.model.EstadoCita;
 import mx.ipn.upiicsa.web.appointment.client.HResourcesClient;
 
 @Path("/appointments")
@@ -29,8 +31,36 @@ public class AppointmentResource {
     HResourcesClient hResourcesClient;
 
     @GET
-    public List<Cita> list() {
-        return Cita.listAll();
+    public List<Cita> list(@QueryParam("personaId") Integer personaId,
+            @QueryParam("empleadoId") Integer empleadoId,
+            @QueryParam("date") String date) {
+        if (personaId != null) {
+            return Cita.list("idPersona", personaId);
+        }
+        if (empleadoId != null && date != null) {
+            try {
+                // Parse date (YYYY-MM-DD)
+                java.time.LocalDate localDate = java.time.LocalDate.parse(date);
+                java.time.LocalDateTime start = localDate.atStartOfDay();
+                java.time.LocalDateTime end = localDate.atTime(java.time.LocalTime.MAX);
+
+                // Assuming fechaHora is LocalDateTime
+                return Cita.list("idEmpleado = ?1 and fechaHora >= ?2 and fechaHora <= ?3",
+                        empleadoId, start, end);
+            } catch (Exception e) {
+                // Invalid date format
+                throw new jakarta.ws.rs.BadRequestException("Invalid date format. Use YYYY-MM-DD");
+            }
+        }
+        if (empleadoId != null) {
+            return Cita.list("idEmpleado", empleadoId);
+        }
+        List<Cita> list = Cita.listAll();
+        System.out.println("Returning " + list.size() + " appointments");
+        if (!list.isEmpty()) {
+            System.out.println("First appointment status: " + list.get(0).estado);
+        }
+        return list;
     }
 
     @GET
@@ -43,6 +73,9 @@ public class AppointmentResource {
     @Transactional
     public Response create(Cita obj) {
         // TODO: Validate availability via hResourcesClient
+        if (obj.estado == null) {
+            obj.estado = EstadoCita.findById(1); // Default to Agendada
+        }
         obj.persist();
         // TODO: Notify hResources to blocking the slot?
         return Response.status(Response.Status.CREATED).entity(obj).build();
@@ -61,6 +94,25 @@ public class AppointmentResource {
         entity.idServicio = obj.idServicio;
         entity.idSucursal = obj.idSucursal;
         entity.idEmpleado = obj.idEmpleado;
+        if (obj.estado != null) {
+            entity.estado = obj.estado;
+        }
+        return entity;
+    }
+
+    @PUT
+    @Path("/{id}/status")
+    @Transactional
+    public Cita updateStatus(@PathParam("id") Integer id, EstadoCita status) {
+        Cita entity = Cita.findById(id);
+        if (entity == null) {
+            throw new jakarta.ws.rs.NotFoundException();
+        }
+        EstadoCita newStatus = EstadoCita.findById(status.id);
+        if (newStatus == null) {
+            throw new jakarta.ws.rs.BadRequestException("Invalid Status ID");
+        }
+        entity.estado = newStatus;
         return entity;
     }
 

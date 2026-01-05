@@ -1,13 +1,28 @@
 package mx.ipn.upiicsa.web.accesscontrol.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
+@RegisterForReflection
 public class LoginDto {
-    @NotBlank(message = "Favor de proporcionar el nombre de usuario")
-    @Email(message = "El nombre de usuario es incorrecto, favor de proporcionar un correo electrónico")
     public String username;
-
-    @NotBlank(message = "Favor de proporcionar la contraseña")
     public String password;
+
+    public LoginDto() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
