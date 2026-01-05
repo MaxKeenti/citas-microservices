@@ -1,6 +1,5 @@
 package mx.ipn.upiicsa.web.accesscontrol.resource;
 
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;

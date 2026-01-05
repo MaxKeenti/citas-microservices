@@ -29,6 +29,7 @@ public class EmpleadoResource {
     AccessControlClient accessControlClient;
 
     @GET
+    @SuppressWarnings("null")
     public List<mx.ipn.upiicsa.web.hresources.dto.EmpleadoDto> list() {
         List<Empleado> employees = Empleado.listAll();
         return employees.stream().map(e -> {
@@ -44,7 +45,7 @@ public class EmpleadoResource {
                         e.sucursal.id, e.sucursal.nombre);
                 return new mx.ipn.upiicsa.web.hresources.dto.EmpleadoDto(e.id, "Unknown", "Employee", "", sDto);
             }
-        }).collect(java.util.stream.Collectors.toList());
+        }).toList();
     }
 
     @GET
@@ -83,6 +84,7 @@ public class EmpleadoResource {
 
     @GET
     @Path("/{id}/horarios")
+    @SuppressWarnings("null")
     public List<mx.ipn.upiicsa.web.hresources.dto.HorarioDto> getHorarios(@PathParam("id") Integer id) {
         List<mx.ipn.upiicsa.web.hresources.model.EmpleadoHorario> ehList = mx.ipn.upiicsa.web.hresources.model.EmpleadoHorario
                 .list("idPersona", id);
@@ -90,6 +92,6 @@ public class EmpleadoResource {
             mx.ipn.upiicsa.web.hresources.model.Horario h = eh.horario;
             return new mx.ipn.upiicsa.web.hresources.dto.HorarioDto(h.id, h.diaLaboral.id, h.diaLaboral.nombre,
                     h.horaInicio, h.horaFin);
-        }).collect(java.util.stream.Collectors.toList());
+        }).toList();
     }
 }
